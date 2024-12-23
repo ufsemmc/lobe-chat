@@ -7,6 +7,9 @@ export const o1Models = new Set([
   'o1-preview-2024-09-12',
   'o1-mini',
   'o1-mini-2024-09-12',
+]);
+
+export const o1FullModels = new Set([
   'o1',
   'o1-2024-12-17',
 ]);
@@ -17,6 +20,18 @@ export const pruneO1Payload = (payload: ChatStreamPayload) => ({
   messages: payload.messages.map((message: OpenAIChatMessage) => ({
     ...message,
     role: message.role === 'system' ? 'user' : message.role,
+  })),
+  presence_penalty: 0,
+  temperature: 1,
+  top_p: 1,
+});
+
+export const pruneO1FullPayload = (payload: ChatStreamPayload) => ({
+  ...payload,
+  frequency_penalty: 0,
+  messages: payload.messages.map((message: OpenAIChatMessage) => ({
+    ...message,
+    role: message.role === 'system' ? 'developer' : message.role,
   })),
   presence_penalty: 0,
   reasoning_effort: 'high',
@@ -32,6 +47,10 @@ export const LobeOpenAI = LobeOpenAICompatibleFactory({
 
       if (o1Models.has(model)) {
         return pruneO1Payload(payload) as any;
+      }
+
+      if (o1FullModels.has(model)) {
+        return pruneO1FullPayload(payload) as any;
       }
 
       return { ...payload, stream: payload.stream ?? true };

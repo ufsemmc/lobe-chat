@@ -2,7 +2,7 @@ import { LOBE_DEFAULT_MODEL_LIST } from '@/config/modelProviders';
 import type { ChatModelCard } from '@/types/llm';
 
 import { AgentRuntimeErrorType } from '../error';
-import { o1Models, pruneO1Payload } from '../openai';
+import {o1FullModels, o1Models, pruneO1FullPayload, pruneO1Payload} from '../openai';
 import { ModelProvider } from '../types';
 import {
   CHAT_MODELS_BLOCK_LIST,
@@ -39,6 +39,10 @@ export const LobeGithubAI = LobeOpenAICompatibleFactory({
 
       if (o1Models.has(model)) {
         return { ...pruneO1Payload(payload), stream: false } as any;
+      }
+
+      if (o1FullModels.has(model)) {
+        return { ...pruneO1FullPayload(payload), stream: false } as any;
       }
 
       return { ...payload, stream: payload.stream ?? true };

@@ -38,7 +38,7 @@ export const LobeGithubAI = LobeOpenAICompatibleFactory({
       const { model } = payload;
 
       if (model.startsWith('o1') || model.startsWith('o3')) {
-        return pruneReasoningPayload(payload) as any;
+        return { ...pruneReasoningPayload(payload), stream: false } as any;
       }
 
       return { ...payload, stream: payload.stream ?? true };

@@ -187,7 +187,10 @@ export const LobeOpenAICompatibleFactory = <T extends Record<string, any> = any>
       if (customClient?.createClient) {
         this.client = customClient.createClient(initOptions as any);
       } else {
-        this.client = new OpenAI(initOptions);
+        this.client = new OpenAI({
+          ...initOptions, // 展开已有的配置
+          timeout: 7_200_000, // 将 timeout 添加到配置对象中
+        });
       }
 
       this.baseURL = baseURL || this.client.baseURL;

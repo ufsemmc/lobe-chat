@@ -189,7 +189,7 @@ export const LobeOpenAICompatibleFactory = <T extends Record<string, any> = any>
       } else {
         this.client = new OpenAI({
           ...initOptions, // 展开已有的配置
-          timeout: 14_400_000, // 将 timeout 添加到配置对象中
+          timeout: 7_200_000, // 将 timeout 添加到配置对象中
         });
       }
 
